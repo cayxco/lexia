@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Spelling</title>
+<style>
+:root{--bg:#f6f5f1;--fg:#1c1c1a;--mute:#9a9890;--ok:#2f9e6b;--bad:#e0523f;--bar:#1c1c1a;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#161615;--fg:#f1efe8;--mute:#6f6d66;--ok:#5fcf9a;--bad:#ff7b66;--bar:#f1efe8}}
+:root[data-theme="dark"]{--bg:#161615;--fg:#f1efe8;--mute:#6f6d66;--ok:#5fcf9a;--bad:#ff7b66;--bar:#f1efe8}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{background:var(--bg);color:var(--fg);font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;display:flex;flex-direction:column;overflow:hidden}
+#bar{height:4px;background:var(--bar);width:100%;transform-origin:left;transform:scaleX(0)}
+header{display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between;padding:18px 24px;font-size:13px;letter-spacing:.2em;color:var(--mute)}
+main{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 16px;text-align:center}
+#title{font-size:clamp(28px,7vw,56px);letter-spacing:.35em;margin-right:-.35em}
+#sub{margin-top:20px;font-size:13px;letter-spacing:.25em;color:var(--mute);animation:blink 1.4s infinite}
+@keyframes blink{50%{opacity:.25}}
+#play{display:none;width:100%}
+#ans{width:100%;max-width:900px;background:none;border:0;outline:0;color:var(--fg);text-align:center;text-transform:uppercase;font:inherit;font-size:clamp(36px,10vw,88px);letter-spacing:.18em;padding:0;caret-color:var(--fg)}
+#ans.ok{color:var(--ok)}#ans.bad{color:var(--bad);text-decoration:line-through;text-decoration-thickness:3px}
+#fb{height:1.4em;margin-top:18px;font-size:clamp(22px,5vw,40px);letter-spacing:.18em;color:var(--ok)}
+.pop{animation:pop .25s}@keyframes pop{from{transform:scale(1.15)}to{transform:scale(1)}}
+.shake{animation:shake .3s}@keyframes shake{25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+#rep{display:inline-flex;align-items:center;gap:10px;margin-top:28px;background:none;border:1.5px solid var(--mute);color:var(--fg);border-radius:999px;padding:10px 22px;font:inherit;font-size:13px;letter-spacing:.2em;cursor:pointer;transition:transform .1s,border-color .1s}#rep:hover{border-color:var(--fg)}#rep:active{transform:scale(.94)}
+#ctrl{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}#th{margin-top:10px;min-height:1.5em;font-size:clamp(16px,3.6vw,24px);color:var(--mute);letter-spacing:.04em}.chip{background:none;border:1.5px solid var(--mute);color:var(--fg);border-radius:999px;padding:5px 12px;font:inherit;font-size:11px;letter-spacing:.2em;cursor:pointer}.chip:hover{border-color:var(--fg)}
+#panel{display:none;position:fixed;inset:0;background:var(--bg);z-index:5;padding:calc(env(safe-area-inset-top,0px) + 18px) 24px 24px;overflow-y:auto}#pbox{max-width:560px;margin:0 auto}#phead{display:flex;justify-content:space-between;align-items:center;font-size:13px;letter-spacing:.2em;color:var(--mute);margin-bottom:18px}
+.row{display:flex;justify-content:space-between;align-items:baseline;padding:10px 0;border-bottom:1px solid var(--mute);font-size:18px;letter-spacing:.15em}.row small{font-size:12px;color:var(--mute);letter-spacing:.1em}.row.ok{color:var(--ok)}.row.bad{color:var(--bad)}#pempty{color:var(--mute);font-size:13px;letter-spacing:.15em;padding:30px 0;text-align:center}
+#rd{display:none;position:fixed;inset:0;z-index:6;background:var(--bg);flex-direction:column;padding:calc(env(safe-area-inset-top,0px) + 14px) 20px calc(env(safe-area-inset-bottom,0px) + 14px)}
+#rbar{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}#rctl{display:flex;gap:8px;flex-wrap:wrap}
+#rstat{min-height:2em;margin:14px 0 6px;text-align:center;font-size:13px;letter-spacing:.2em;color:var(--mute)}
+#rtext{flex:1;overflow:hidden;max-width:760px;width:100%;margin:0 auto;font-size:clamp(22px,4.4vw,34px);line-height:1.8;text-align:center;-webkit-mask-image:linear-gradient(transparent,#000 12%,#000 88%,transparent);mask-image:linear-gradient(transparent,#000 12%,#000 88%,transparent)}
+#rtext.done{overflow-y:auto}.sp{height:42vh}
+.w{display:inline-block;margin:0 .2em;transition:color .25s}.w.ok{color:var(--ok)}.w.close{color:#e0a100}.w.miss{color:var(--bad)}
+#rfoot{text-align:center;padding-top:10px}
+footer{padding:18px;text-align:center;font-size:11px;letter-spacing:.2em;color:var(--mute)}
+</style>
+</head>
+<body>
+<div id="bar"></div>
+<header><span id="score">0 / 0</span><span id="ctrl"><button class="chip" id="rdb" type="button" tabindex="-1">READ MODE</button><button class="chip" id="lv" type="button" tabindex="-1"></button><button class="chip" id="mode" type="button" tabindex="-1"></button><button class="chip" id="hbtn" type="button" tabindex="-1">HISTORY</button></span><span id="streak"></span></header>
+<main>
+  <div id="idle"><div id="title">SPELLING</div><div id="sub">PRESS ENTER TO START</div></div>
+  <div id="play"><input id="ans" autocomplete="off" autocorrect="off" autocapitalize="characters" spellcheck="false" aria-label="answer"><div id="fb"></div><div id="th"></div><button id="rep" type="button" tabindex="-1"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4z" fill="currentColor"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg>REPLAY</button></div>
+</main>
+<div id="panel"><div id="pbox"><div id="phead"><span id="ptitle"></span><button class="chip" id="pclose" type="button" tabindex="-1">CLOSE</button></div><div id="plist"></div></div></div>
+<div id="rd"><div id="rbar"><button class="chip" id="rx" type="button" tabindex="-1">CLOSE</button><span id="rctl"><button class="chip" id="rlv" type="button" tabindex="-1"></button><button class="chip" id="rtx" type="button" tabindex="-1"></button><button class="chip" id="rsp" type="button" tabindex="-1"></button></span></div><div id="rstat"></div><div id="rtext"></div><div id="rfoot"><button class="chip" id="rgo" type="button" tabindex="-1">START READING</button></div></div>
+<footer>ENTER SUBMIT / NEXT &nbsp;·&nbsp; TAB REPLAY &nbsp;·&nbsp; CTRL+M MUTE</footer>
+<script>
+const WORDS="accommodate achieve acquire address aggressive apparent argument beautiful beginning believe calendar category cemetery changeable committee conscience conscious definitely description disappoint embarrass environment especially exaggerate existence familiar February fluorescent foreign forty government grammar guarantee harass height humorous immediately independent intelligence interrupt knowledge laboratory leisure library license maintenance millennium miniature mischievous necessary neighbor noticeable occasion occurrence parallel perseverance possession privilege pronunciation questionnaire receive recommend reference relevant restaurant rhythm schedule separate sergeant successful surprise temperature tomorrow truly unnecessary vacuum weird width".split(" ");
+const TIME=20000;
+const DATA=[[1,"friend:เพื่อน,because:เพราะว่า,people:ผู้คน,school:โรงเรียน,different:แตกต่าง,favorite:ที่ชอบที่สุด,interesting:น่าสนใจ,vegetable:ผัก,answer:คำตอบ,beautiful:สวยงาม,believe:เชื่อ,receive:ได้รับ,tomorrow:พรุ่งนี้,library:ห้องสมุด,height:ความสูง,width:ความกว้าง,surprise:ความประหลาดใจ,separate:แยก,truly:อย่างแท้จริง,weird:แปลก,forty:สี่สิบ,address:ที่อยู่,calendar:ปฏิทิน,beginning:จุดเริ่มต้น,restaurant:ร้านอาหาร,government:รัฐบาล,grammar:ไวยากรณ์,knowledge:ความรู้,February:กุมภาพันธ์"],[2,"achieve:บรรลุ,acquire:ได้มา,apparent:ชัดเจน,argument:การโต้แย้ง,category:หมวดหมู่,committee:คณะกรรมการ,definitely:แน่นอน,description:คำอธิบาย,disappoint:ทำให้ผิดหวัง,environment:สิ่งแวดล้อม,existence:การดำรงอยู่,familiar:คุ้นเคย,foreign:ต่างประเทศ,guarantee:รับประกัน,humorous:ตลกขบขัน,immediately:ทันที,independent:เป็นอิสระ,interrupt:ขัดจังหวะ,laboratory:ห้องปฏิบัติการ,leisure:เวลาว่าง,license:ใบอนุญาต,necessary:จำเป็น,neighbor:เพื่อนบ้าน,occasion:โอกาส,possession:ทรัพย์สิน,recommend:แนะนำ,reference:การอ้างอิง,relevant:ที่เกี่ยวข้อง,schedule:ตารางเวลา,successful:ประสบความสำเร็จ,temperature:อุณหภูมิ,vacuum:สุญญากาศ"],[3,"accommodate:รองรับ/จัดที่พักให้,aggressive:ก้าวร้าว,cemetery:สุสาน,changeable:เปลี่ยนแปลงได้ง่าย,conscience:มโนธรรม,conscious:รู้ตัว,embarrass:ทำให้อาย,especially:โดยเฉพาะ,exaggerate:พูดเกินจริง,fluorescent:เรืองแสง,harass:รังควาญ,intelligence:ความฉลาด,maintenance:การบำรุงรักษา,millennium:สหัสวรรษ,miniature:ขนาดจิ๋ว,mischievous:ซุกซน,noticeable:เห็นได้ชัด,occurrence:เหตุการณ์ที่เกิดขึ้น,parallel:ขนาน,perseverance:ความพากเพียร,privilege:สิทธิพิเศษ,pronunciation:การออกเสียง,questionnaire:แบบสอบถาม,rhythm:จังหวะ,sergeant:จ่า (ทหาร/ตำรวจ),unnecessary:ไม่จำเป็น"]];
+const TH={},LVL={},BYLV={all:[],1:[],2:[],3:[],4:[],5:[],6:[],7:[]};
+DATA.forEach(([l,s])=>s.split(",").forEach(p=>{const[w,t]=p.split(":");TH[w]=t;LVL[w]=l;BYLV[l].push(w);BYLV.all.push(w)}));
+(()=>{
+  const o=[null,BYLV[1].slice(),BYLV[2].slice(),BYLV[3].slice()];
+  [1,2,3,4,5,6,7].forEach(k=>BYLV[k]=[]);BYLV.all=[];
+  const put=(w,l)=>{LVL[w]=l;BYLV[l].push(w);BYLV.all.push(w)};
+  o[1].forEach(w=>put(w,2));o[2].forEach(w=>put(w,3));o[3].forEach((w,i)=>put(w,i<19?4:5));
+  [[1,"apple:แอปเปิล,water:น้ำ,house:บ้าน,happy:มีความสุข,green:สีเขียว,mother:แม่,father:พ่อ,sister:พี่สาวหรือน้องสาว,brother:พี่ชายหรือน้องชาย,yellow:สีเหลือง,orange:สีส้ม,monkey:ลิง,banana:กล้วย,table:โต๊ะ,window:หน้าต่าง,garden:สวน,animal:สัตว์,family:ครอบครัว,morning:ตอนเช้า,night:กลางคืน,music:ดนตรี,market:ตลาด"],[6,"bureaucracy:ระบบราชการ,camaraderie:มิตรภาพ,conscientious:รอบคอบและรับผิดชอบ,entrepreneur:ผู้ประกอบการ,idiosyncrasy:นิสัยเฉพาะตัว,liaison:ผู้ประสานงาน,maneuver:การเคลื่อนไหวอย่างชำนาญ,minuscule:เล็กจิ๋ว,onomatopoeia:คำเลียนเสียง,pharaoh:ฟาโรห์,playwright:นักเขียนบทละคร,precede:มาก่อน,pseudonym:นามแฝง,reminiscent:ที่ชวนให้นึกถึง,silhouette:เงาดำ,surveillance:การเฝ้าระวัง,threshold:ธรณีประตู,vengeance:การแก้แค้น,Wednesday:วันพุธ,acquaintance:คนรู้จัก"],[7,"bourgeoisie:ชนชั้นกลาง,chrysanthemum:ดอกเบญจมาศ,connoisseur:ผู้เชี่ยวชาญด้านรสนิยม,pneumonia:ปอดบวม,rhinoceros:แรด,supersede:เข้าแทนที่,ubiquitous:มีอยู่ทั่วไป,vicissitude:ความผันผวน,xylophone:ไซโลโฟน,zeitgeist:จิตวิญญาณแห่งยุคสมัย,quintessential:เป็นแบบฉบับที่สมบูรณ์,rendezvous:การนัดพบ,paraphernalia:ข้าวของเครื่องใช้,pusillanimous:ขี้ขลาด,mnemonic:ตัวช่วยจำ,gubernatorial:เกี่ยวกับผู้ว่าการรัฐ,lieutenant:ร้อยโท,surreptitious:ลับๆล่อๆ,ophthalmologist:จักษุแพทย์,mellifluous:ไพเราะลื่นหู"]]
+  .forEach(([l,s])=>s.split(",").forEach(p=>{const[w,t]=p.split(":");TH[w]=t;put(w,l)}));
+  [[1,"bread:ขนมปัง,chair:เก้าอี้,cloud:เมฆ,dance:เต้นรำ,dream:ความฝัน,earth:โลก,flower:ดอกไม้,hand:มือ,juice:น้ำผลไม้,kitchen:ห้องครัว,lemon:มะนาวเหลือง,mouse:หนู,paper:กระดาษ,pencil:ดินสอ,river:แม่น้ำ,smile:รอยยิ้ม,sleep:นอนหลับ,tiger:เสือ"],[2,"beach:ชายหาด,bridge:สะพาน,candle:เทียน,castle:ปราสาท,country:ประเทศ,daughter:ลูกสาว,enough:เพียงพอ,island:เกาะ,journey:การเดินทาง,minute:นาที,mountain:ภูเขา,picture:รูปภาพ,question:คำถาม,strange:แปลกประหลาด,thought:ความคิด,tonight:คืนนี้,weather:สภาพอากาศ,whistle:เสียงนกหวีด,yesterday:เมื่อวาน"],[3,"absence:การขาดงาน,achievement:ความสำเร็จ,advertisement:โฆษณา,appearance:รูปลักษณ์,audience:ผู้ชม,decision:การตัดสินใจ,discipline:วินัย,experience:ประสบการณ์,equipment:อุปกรณ์,exercise:การออกกำลังกาย,gorgeous:งดงามมาก,incredible:เหลือเชื่อ,marriage:การแต่งงาน,opportunity:โอกาส,physical:ทางกาย,probably:น่าจะ,professional:มืออาชีพ,responsible:รับผิดชอบ,secretary:เลขานุการ,sincerely:ด้วยความจริงใจ,thorough:ละเอียดถี่ถ้วน"],[4,"accidentally:โดยไม่ได้ตั้งใจ,acknowledge:ยอมรับ,ambiguous:กำกวม,anonymous:นิรนาม,appropriate:เหมาะสม,assassination:การลอบสังหาร,catastrophe:หายนะ,commitment:ความมุ่งมั่น,competition:การแข่งขัน,correspondence:การติดต่อทางจดหมาย,criticism:การวิจารณ์,desperate:สิ้นหวัง,efficient:มีประสิทธิภาพ,embarrassment:ความอับอาย,enthusiasm:ความกระตือรือร้น,hierarchy:ลำดับชั้น,irresistible:ต้านทานไม่ได้,misspell:สะกดผิด,permanent:ถาวร,prejudice:อคติ"],[5,"apocalypse:วันสิ้นโลก,assimilate:ดูดซึม,bureaucratic:เกี่ยวกับระบบราชการ,cantaloupe:แคนตาลูป,collaborate:ร่วมมือ,colleague:เพื่อนร่วมงาน,commemorate:รำลึกถึง,controversy:ข้อโต้แย้ง,diaphragm:กะบังลม,dilemma:ภาวะลำบากใจ,exhilarate:ทำให้ตื่นเต้นสนุกสนาน,hindrance:อุปสรรค,hypothesis:สมมติฐาน,inoculate:ฉีดวัคซีน,jeopardize:ทำให้ตกอยู่ในอันตราย,judgement:การตัดสิน,mortgage:การจำนอง,nauseous:คลื่นไส้,omission:การละเว้น,pastime:งานอดิเรก"],[6,"acquiesce:ยอมตามโดยดี,anachronism:สิ่งที่ล้าสมัยไม่เข้ายุค,belligerent:ก้าวร้าวชอบสู้,clairvoyant:ผู้มีญาณทิพย์,cognizant:ตระหนักรู้,dichotomy:การแบ่งเป็นสองขั้ว,ebullient:ร่าเริงล้นเหลือ,ephemeral:ชั่วคราวสั้นนัก,facetious:ชอบพูดเล่น,fastidious:จู้จี้พิถีพิถัน,incessant:ไม่หยุดหย่อน,insidious:แอบแฝงอันตราย,meticulous:พิถีพิถัน,nonchalant:เฉยเมย,ostracize:กีดกันออกจากกลุ่ม,pejorative:เชิงดูหมิ่น,quandary:ภาวะลำบากใจ,serendipity:การค้นพบโดยบังเอิญ,sycophant:คนประจบสอพลอ,tenacious:เหนียวแน่นไม่ยอมแพ้"],[7,"chiaroscuro:การเล่นแสงเงา,cacophony:เสียงอึกทึก,catharsis:การระบายอารมณ์,diaphanous:โปร่งแสงบางเบา,fuchsia:สีชมพูบานเย็น,hemorrhage:การตกเลือด,idiosyncratic:เฉพาะตัวแปลกๆ,juxtaposition:การวางเทียบเคียง,kaleidoscope:กล้องกระจกสีเปลี่ยนลาย,labyrinth:เขาวงกต,memorabilia:ของที่ระลึก,phlegmatic:เฉื่อยชา,pharmaceutical:เกี่ยวกับเภสัช,prestidigitation:การเล่นกล,sacrilegious:หมิ่นศาสนา,schism:การแตกแยก,sphygmomanometer:เครื่องวัดความดัน,subpoena:หมายศาล,xenophobia:ความกลัวคนต่างชาติ,zephyr:ลมอ่อนๆ"]]
+  .forEach(([l,s])=>s.split(",").forEach(p=>{const[w,t]=p.split(":");TH[w]=t;put(w,l)}));
+  BYLV.rand=BYLV.all;
+})();
+const LVNAME={all:"ALL LEVELS",1:"BEGINNER",2:"NOVICE",3:"MODERATE",4:"ADVANCED",5:"EXPERT",6:"GENIUS",7:"MASTER",rand:"RANDOMISER"};
+const $=id=>document.getElementById(id);
+const ans=$("ans"),bar=$("bar"),fb=$("fb");
+let state="idle",deck=[],word="",deadline=0,raf=0,score=0,total=0,streak=0,muted=false,ac=null;
+let hist={},mode="all",level="all",panel=false,reading=false,lastT=0;
+try{hist=JSON.parse(localStorage.getItem("spell_hist")||"{}");mode=localStorage.getItem("spell_mode")||"all";level=localStorage.getItem("spell_lv")||"all"}catch(e){}
+const save=()=>{try{localStorage.setItem("spell_hist",JSON.stringify(hist));localStorage.setItem("spell_mode",mode);localStorage.setItem("spell_lv",level)}catch(e){}};
+const seen=()=>Object.keys(hist);
+if(!BYLV[level])level="all";
+const inLv=k=>level==="all"||level==="rand"||String(LVL[k])===level;
+const sn=()=>seen().filter(inLv);
+const doneRound=new Set(),rnd=a=>a[Math.floor(Math.random()*a.length)];
+function pickWord(){
+  if(mode==="review"&&sn().length){
+    let c=sn().filter(k=>!hist[k].last);
+    if(!c.length){c=sn().filter(k=>!doneRound.has(k));if(!c.length){doneRound.clear();c=sn()}}
+    const d=c.filter(k=>k!==word);return rnd(d.length?d:c);
+  }
+  if(level==="rand"){const p=BYLV[1+Math.floor(Math.random()*7)].filter(k=>k!==word);return rnd(p)}
+  if(!deck.length)deck=BYLV[level].slice().sort(()=>Math.random()-.5);
+  return deck.pop();
+}
+
+function tone(f,d,type="sine",v=.06,t0=0,f2){
+  if(muted||!ac)return;
+  const t=ac.currentTime+t0,o=ac.createOscillator(),g=ac.createGain();
+  o.type=type;o.frequency.setValueAtTime(f,t);if(f2)o.frequency.exponentialRampToValueAtTime(f2,t+d);
+  g.gain.setValueAtTime(v,t);g.gain.exponentialRampToValueAtTime(.0001,t+d);
+  o.connect(g).connect(ac.destination);o.start(t);o.stop(t+d+.02);
+}
+const sTick=()=>tone(700+Math.random()*250,.06,"square",.12);
+const sBack=()=>tone(380,.06,"triangle",.16);
+const sEnter=()=>tone(220,.09,"triangle",.25);
+const sOk=()=>{tone(660,.14,"sine",.09);tone(880,.14,"sine",.09,.1);tone(1320,.25,"sine",.09,.2)};
+const sBad=()=>{tone(220,.35,"sawtooth",.06,0,110);tone(165,.35,"sawtooth",.05,.12,80)};
+
+function speak(){
+  if(!("speechSynthesis" in window))return;
+  speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(word);u.lang="en-US";u.rate=.85;
+  const v=speechSynthesis.getVoices().find(x=>/^en[-_]US/i.test(x.lang))||speechSynthesis.getVoices().find(x=>/^en/i.test(x.lang));
+  if(v)u.voice=v;speechSynthesis.speak(u);
+}
+function draw(){
+  const now=performance.now();if(panel||reading)deadline+=now-lastT;lastT=now;
+  const left=deadline-now;
+  bar.style.transform="scaleX("+Math.max(0,left/TIME)+")";
+  if(left<=0){reveal();return}
+  raf=requestAnimationFrame(draw);
+}
+function next(){
+  word=pickWord();state="ask";
+  ans.value="";ans.className="";ans.readOnly=false;fb.textContent="";$("th").textContent="";
+  deadline=performance.now()+TIME;lastT=performance.now();cancelAnimationFrame(raf);draw();
+  speak();ans.focus();
+}
+function reveal(){
+  if(state!=="ask")return;
+  state="reveal";cancelAnimationFrame(raf);
+  const got=ans.value.trim().toUpperCase(),ok=got===word.toUpperCase();
+  total++;ans.readOnly=true;
+  const h=hist[word]||(hist[word]={r:0,w:0});ok?h.r++:h.w++;h.last=ok?1:0;h.t=Date.now();doneRound.add(word);save();updMode();
+  if(ok){score++;streak++;ans.className="ok";fb.textContent="";sOk();ans.classList.add("pop")}
+  else{streak=0;ans.className="bad";fb.style.color="var(--ok)";fb.textContent=word.toUpperCase();if(!got)ans.value="···";sBad();fb.classList.remove("shake");void fb.offsetWidth;fb.classList.add("shake")}
+  if(ok){fb.style.color="var(--ok)";fb.textContent="✓"}
+  $("score").textContent=score+" / "+total;$("th").textContent=TH[word]||"";
+  $("streak").textContent=streak>1?"STREAK "+streak:"";
+}
+function start(){
+  if(state!=="idle")return;
+  ac=ac||new (window.AudioContext||window.webkitAudioContext)();ac.resume();
+  $("idle").style.display="none";$("play").style.display="block";
+  speechSynthesis.getVoices();next();
+}
+document.addEventListener("keydown",e=>{
+  if(reading)return;if(panel){if(e.key==="Escape"||e.key==="Enter"){e.preventDefault();closePanel()}return}
+  if(state==="idle"){if(e.key==="Enter"){e.preventDefault();start()}return}
+  if(e.key==="Enter"){e.preventDefault();sEnter();state==="ask"?reveal():next();return}
+  if(e.key==="Tab"){e.preventDefault();speak();return}
+  if(state==="ask"&&(e.key==="m"||e.key==="M")&&e.ctrlKey){muted=!muted;e.preventDefault()}
+  if(state==="reveal")e.preventDefault();
+});
+ans.addEventListener("input",()=>{
+  const old=ans._len||0;
+  ans.value=ans.value.toUpperCase().replace(/[^A-Z' -]/g,"");
+  ans._len=ans.value.length;
+  ans.value.length>=old?sTick():sBack();
+});
+$("rep").addEventListener("click",e=>{e.stopPropagation();tone(520,.06,"triangle",.05);speak();ans.focus()});
+function updMode(){const w=sn().filter(k=>!hist[k].last).length;$("mode").textContent=mode==="review"?(w?"REVIEW · "+w+" WRONG":"REVIEW · ALL RIGHT"):"ALL WORDS";$("lv").textContent=LVNAME[level]}
+function closePanel(){panel=false;$("panel").style.display="none";if(state!=="idle")ans.focus()}
+function openPanel(){
+  panel=true;
+  const ks=seen().sort((a,b)=>(hist[a].last-hist[b].last)||((hist[b].t||0)-(hist[a].t||0)));
+  const right=ks.filter(k=>hist[k].last).length;
+  $("ptitle").textContent="HISTORY · "+right+" / "+ks.length+" CORRECT";
+  $("plist").innerHTML=ks.length?ks.map(k=>"<div class='row "+(hist[k].last?"ok":"bad")+"'><span>"+k.toUpperCase()+"</span><small>PLAYED "+(hist[k].r+hist[k].w)+" · WRONG "+hist[k].w+"</small></div>").join(""):"<div id='pempty'>NO WORDS YET</div>";
+  $("panel").style.display="block";
+}
+$("mode").addEventListener("click",e=>{e.stopPropagation();mode=mode==="all"?"review":"all";deck=[];doneRound.clear();save();updMode();if(state!=="idle")ans.focus()});
+$("hbtn").addEventListener("click",e=>{e.stopPropagation();openPanel()});
+$("pclose").addEventListener("click",e=>{e.stopPropagation();closePanel()});
+$("lv").addEventListener("click",e=>{e.stopPropagation();const o=["all","1","2","3","4","5","6","7","rand"];level=o[(o.indexOf(level)+1)%9];deck=[];doneRound.clear();save();updMode();if(state!=="idle")ans.focus()});
+updMode();
+document.addEventListener("click",()=>{if(panel||reading)return;state==="idle"?start():ans.focus()});
+ans.addEventListener("blur",()=>{if(state!=="idle"&&!reading)setTimeout(()=>ans.focus(),0)});
+
+/* READ MODE */
+const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+const TEXTS=[[1,'My Morning','Every morning I wake up at six. I wash my face and brush my teeth. Then I eat bread and drink a glass of milk. My mother makes lunch for me. I walk to school with my best friend. We talk about games and music on the way. I like my school because my teachers are kind. After class I go home and play with my dog.'],[1,'The Market','On Sunday my family goes to the market. There are many fruits and vegetables to see. My father buys red apples and yellow bananas. My sister likes the sweet orange juice. A man sells small toys near the gate. I find a blue pencil box and ask my mother to buy it. We carry the bags home and cook a big dinner together.'],[2,'A Rainy Day','Rainy season in Thailand starts in May and lasts until October. The sky turns dark in the afternoon and heavy rain falls for about an hour. Streets can flood quickly, so many people carry an umbrella or wait inside a cafe. Motorbike taxis become hard to find, and traffic moves slowly. Still, the rain cools the air, and the city feels fresh and quiet when the storm finally passes.'],[2,'Why We Sleep','Sleep is not a waste of time. While we rest, the brain sorts the memories of the day and removes harmful waste. Students who sleep well usually remember more and make fewer mistakes. Experts suggest that teenagers and young adults need around eight hours every night. Bright screens before bed can make it harder to fall asleep, so it is wise to put your phone away early.'],[3,'The Environment','Scientists have gathered convincing evidence that the global temperature is rising. Governments around the world are under pressure to reduce emissions and encourage sustainable development. Critics argue that these measures are expensive, whereas supporters believe that the long term benefits will outweigh the immediate cost. Whatever the outcome, individual responsibility and collaboration between nations remain essential for protecting the environment.'],[3,'Language and Memory','Learning a foreign language demands patience, discipline, and a considerable amount of repetition. Researchers have discovered that spaced practice strengthens memory far more effectively than cramming the night before an examination. Pronunciation, in particular, improves when learners listen carefully, imitate native speakers, and receive immediate feedback about their mistakes.']];
+const RLV=['','BEGINNER','INTERMEDIATE','ADVANCED'],SPD=[.5,.75,1,1.5,2];
+const STOP=new Set('a an the of to in on at is it and or i be as'.split(' '));
+let rl=1,ri=0,rs=2,words=[],st=[],tmp={},fpos=0,running=false,rec=null,rafR=0,lastR=0,sy=0,endT=0;
+const rt=()=>TEXTS.filter(t=>t[0]===rl);
+const norm=s=>s.toLowerCase().replace(/[^a-z']/g,'');
+function lev(a,b){const d=[];for(let i=0;i<=a.length;i++)d[i]=[i];for(let j=1;j<=b.length;j++)d[0][j]=j;for(let i=1;i<=a.length;i++)for(let j=1;j<=b.length;j++)d[i][j]=Math.min(d[i-1][j]+1,d[i][j-1]+1,d[i-1][j-1]+(a[i-1]===b[j-1]?0:1));return d[a.length][b.length]}
+function judge(r,p,out){
+  if(!r)return p;
+  let k=-1,c='ok';
+  for(let i=p;i<Math.min(p+6,words.length);i++)if(words[i]===r){k=i;break}
+  if(k<0)for(let i=p;i<Math.min(p+3,words.length);i++){const m=Math.max(r.length,words[i].length);if(m>2&&1-lev(r,words[i])/m>=.6){k=i;c='close';break}}
+  if(k<0)return p;
+  for(let i=p;i<k;i++)if(!out[i])out[i]=STOP.has(words[i])?'sw':'miss';
+  out[k]=c;return k+1;
+}
+function paint(){for(let i=0;i<words.length;i++){const c=tmp[i]||st[i]||'';const el=$('w'+i);if(el.dataset.c!==c){el.dataset.c=c;el.className='w '+c}}}
+function loadText(){
+  stopRead(true);
+  const l=rt();ri=ri%l.length;const t=l[ri];
+  const raw=t[2].split(/\s+/);words=raw.map(norm);st=raw.map(()=>'');tmp={};fpos=0;
+  const el=$('rtext');el.className='';
+  el.innerHTML="<div class='sp'></div>"+raw.map((w,i)=>"<span class='w' id='w"+i+"'>"+w+'</span>').join(' ')+"<div class='sp'></div>";
+  el.scrollTop=0;sy=0;
+  $('rlv').textContent=RLV[rl];$('rtx').textContent=t[1].toUpperCase();$('rsp').textContent='SPEED '+SPD[rs]+'x';
+  $('rstat').textContent=RLV[rl]+' · '+words.length+' WORDS';$('rgo').textContent='START READING';
+}
+function tick(t){
+  if(!running)return;
+  const el=$('rtext');sy+=28*SPD[rs]*(t-lastR)/1000;lastR=t;el.scrollTop=sy;
+  if(sy>=el.scrollHeight-el.clientHeight-2){stopRead(false);return}
+  rafR=requestAnimationFrame(tick);
+}
+function startRec(){
+  const r=rec=new SR();r.lang='en-US';r.continuous=true;r.interimResults=true;let np=0;
+  r.onstart=()=>{if(!rafR){lastR=performance.now();rafR=requestAnimationFrame(tick)}};
+  r.onresult=e=>{
+    if(!running)return;
+    const fin=[],itm=[];
+    for(let i=0;i<e.results.length;i++){const w=e.results[i][0].transcript.trim().split(/\s+/).map(norm).filter(Boolean);(e.results[i].isFinal?fin:itm).push(...w)}
+    for(;np<fin.length;np++)fpos=judge(fin[np],fpos,st);
+    tmp={};let p=fpos;itm.forEach(w=>{p=judge(w,p,tmp)});
+    paint();
+    if(!endT&&Math.max(fpos,p)>=words.length)endT=setTimeout(()=>stopRead(false),1800);
+  };
+  r.onerror=e=>{if(e.error==='no-speech'||e.error==='aborted')return;halt();$('rgo').textContent='START READING';$('rstat').textContent=(['not-allowed','service-not-allowed'].includes(e.error)?'MIC BLOCKED · OPEN THIS PAGE DIRECTLY IN SAFARI AND ALLOW MIC':'SPEECH ERROR · '+e.error.toUpperCase())};
+  r.onend=()=>{if(running&&rec===r){try{startRec()}catch(x){}}};
+  r.start();
+}
+function halt(){running=false;cancelAnimationFrame(rafR);rafR=0;clearTimeout(endT);endT=0;if(rec){rec.onend=null;try{rec.stop()}catch(x){}rec=null}}
+function stopRead(silent){
+  const was=running;halt();$('rgo').textContent='START READING';
+  if(!was||silent)return;
+  for(const i in tmp)if(!st[i])st[i]=tmp[i];
+  tmp={};st=st.map((c,i)=>c||(STOP.has(words[i])?'sw':'miss'));paint();
+  const n={ok:0,close:0,miss:0,sw:0};st.forEach(c=>n[c]++);
+  const den=words.length-n.sw,acc=den?Math.round((n.ok+n.close*.5)/den*100):0;
+  $('rstat').innerHTML=RLV[rl]+" &nbsp;·&nbsp; ACCURACY <b style='font-size:30px;color:var(--fg)'>"+acc+'%</b> &nbsp;·&nbsp; '+n.ok+' CORRECT · '+n.close+' OFF · '+n.miss+' MISSED';
+  $('rtext').className='done';
+}
+function startRead(){
+  if(!SR){$('rstat').textContent='NO SPEECH RECOGNITION IN THIS BROWSER · USE CHROME OR EDGE';return}
+  loadText();running=true;$('rgo').textContent='STOP';$('rstat').textContent='LISTENING · READ ALOUD';
+  try{startRec()}catch(x){halt();$('rgo').textContent='START READING'}
+  setTimeout(()=>{if(running&&!rafR)$('rstat').textContent='WAITING FOR MIC · NO PROMPT? OPEN THIS PAGE DIRECTLY IN SAFARI'},3000);
+}
+const toggleRead=()=>running?stopRead(false):startRead();
+function closeRead(){stopRead(true);reading=false;$('rd').style.display='none';if(state!=='idle')ans.focus()}
+$('rdb').addEventListener('click',e=>{e.stopPropagation();if('speechSynthesis' in window)speechSynthesis.cancel();reading=true;$('rd').style.display='flex';loadText()});
+$('rx').addEventListener('click',closeRead);
+$('rgo').addEventListener('click',toggleRead);
+$('rlv').addEventListener('click',()=>{rl=rl%3+1;ri=0;loadText()});
+$('rtx').addEventListener('click',()=>{ri++;loadText()});
+$('rsp').addEventListener('click',()=>{rs=(rs+1)%SPD.length;$('rsp').textContent='SPEED '+SPD[rs]+'x'});
+document.addEventListener('keydown',e=>{if(!reading)return;if(e.key==='Enter'){e.preventDefault();toggleRead()}else if(e.key==='Escape')closeRead()});
+</script>
+</body>
+</html>
