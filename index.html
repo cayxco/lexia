@@ -25,6 +25,7 @@ main{flex:1;display:flex;flex-direction:column;align-items:center;justify-conten
 .pop{animation:pop .25s}@keyframes pop{from{transform:scale(1.15)}to{transform:scale(1)}}
 .shake{animation:shake .3s}@keyframes shake{25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
 #rep{display:inline-flex;align-items:center;gap:10px;margin-top:28px;background:none;border:1.5px solid var(--mute);color:var(--fg);border-radius:999px;padding:10px 22px;font:inherit;font-size:13px;letter-spacing:.2em;cursor:pointer;transition:transform .1s,border-color .1s}#rep:hover{border-color:var(--fg)}#rep:active{transform:scale(.94)}
+#act{display:none;margin-top:18px;background:var(--fg);color:var(--bg);border:0;border-radius:999px;padding:14px 44px;font:inherit;font-size:15px;letter-spacing:.25em;cursor:pointer}body.touch #act{display:inline-flex}#act:active{transform:scale(.95)}
 #ctrl{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}#th{margin-top:10px;min-height:1.5em;font-size:clamp(16px,3.6vw,24px);color:var(--mute);letter-spacing:.04em}.chip{background:none;border:1.5px solid var(--mute);color:var(--fg);border-radius:999px;padding:5px 12px;font:inherit;font-size:11px;letter-spacing:.2em;cursor:pointer}.chip:hover{border-color:var(--fg)}
 #panel{display:none;position:fixed;inset:0;background:var(--bg);z-index:5;padding:calc(env(safe-area-inset-top,0px) + 18px) 24px 24px;overflow-y:auto}#pbox{max-width:560px;margin:0 auto}#phead{display:flex;justify-content:space-between;align-items:center;font-size:13px;letter-spacing:.2em;color:var(--mute);margin-bottom:18px}
 .row{display:flex;justify-content:space-between;align-items:baseline;padding:10px 0;border-bottom:1px solid var(--mute);font-size:18px;letter-spacing:.15em}.row small{font-size:12px;color:var(--mute);letter-spacing:.1em}.row.ok{color:var(--ok)}.row.bad{color:var(--bad)}#pempty{color:var(--mute);font-size:13px;letter-spacing:.15em;padding:30px 0;text-align:center}
@@ -43,7 +44,7 @@ footer{padding:18px;text-align:center;font-size:11px;letter-spacing:.2em;color:v
 <header><span id="score">0 / 0</span><span id="ctrl"><button class="chip" id="rdb" type="button" tabindex="-1">READ MODE</button><button class="chip" id="lv" type="button" tabindex="-1"></button><button class="chip" id="mode" type="button" tabindex="-1"></button><button class="chip" id="hbtn" type="button" tabindex="-1">HISTORY</button></span><span id="streak"></span></header>
 <main>
   <div id="idle"><div id="title">SPELLING</div><div id="sub">PRESS ENTER TO START</div></div>
-  <div id="play"><input id="ans" autocomplete="off" autocorrect="off" autocapitalize="characters" spellcheck="false" aria-label="answer"><div id="fb"></div><div id="th"></div><button id="rep" type="button" tabindex="-1"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4z" fill="currentColor"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg>REPLAY</button></div>
+  <div id="play"><input id="ans" autocomplete="off" autocorrect="off" autocapitalize="characters" spellcheck="false" aria-label="answer"><div id="fb"></div><button id="act" type="button" tabindex="-1">CHECK</button><div id="th"></div><button id="rep" type="button" tabindex="-1"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4z" fill="currentColor"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg>REPLAY</button></div>
 </main>
 <div id="panel"><div id="pbox"><div id="phead"><span id="ptitle"></span><button class="chip" id="pclose" type="button" tabindex="-1">CLOSE</button></div><div id="plist"></div></div></div>
 <div id="rd"><div id="rbar"><button class="chip" id="rx" type="button" tabindex="-1">CLOSE</button><span id="rctl"><button class="chip" id="rlv" type="button" tabindex="-1"></button><button class="chip" id="rtx" type="button" tabindex="-1"></button><button class="chip" id="rsp" type="button" tabindex="-1"></button></span></div><div id="rstat"></div><div id="rtext"></div><div id="rfoot"><button class="chip" id="rgo" type="button" tabindex="-1">START READING</button></div></div>
@@ -68,6 +69,8 @@ DATA.forEach(([l,s])=>s.split(",").forEach(p=>{const[w,t]=p.split(":");TH[w]=t;L
 const LVNAME={all:"ALL LEVELS",1:"BEGINNER",2:"NOVICE",3:"MODERATE",4:"ADVANCED",5:"EXPERT",6:"GENIUS",7:"MASTER",rand:"RANDOMISER"};
 const $=id=>document.getElementById(id);
 const ans=$("ans"),bar=$("bar"),fb=$("fb");
+const TOUCH=matchMedia("(pointer:coarse)").matches||navigator.maxTouchPoints>0;
+if(TOUCH)document.body.classList.add("touch");
 let state="idle",deck=[],word="",deadline=0,raf=0,score=0,total=0,streak=0,muted=false,ac=null;
 let hist={},mode="all",level="all",panel=false,reading=false,lastT=0;
 try{hist=JSON.parse(localStorage.getItem("spell_hist")||"{}");mode=localStorage.getItem("spell_mode")||"all";level=localStorage.getItem("spell_lv")||"all"}catch(e){}
@@ -106,7 +109,7 @@ function speak(){
   speechSynthesis.cancel();
   const u=new SpeechSynthesisUtterance(word);u.lang="en-US";u.rate=.85;
   const v=speechSynthesis.getVoices().find(x=>/^en[-_]US/i.test(x.lang))||speechSynthesis.getVoices().find(x=>/^en/i.test(x.lang));
-  if(v)u.voice=v;speechSynthesis.speak(u);
+  if(v)u.voice=v;u.onend=()=>{window._u=null};window._u=u;speechSynthesis.resume();speechSynthesis.speak(u);
 }
 function draw(){
   const now=performance.now();if(panel||reading)deadline+=now-lastT;lastT=now;
@@ -116,14 +119,14 @@ function draw(){
   raf=requestAnimationFrame(draw);
 }
 function next(){
-  word=pickWord();state="ask";
+  word=pickWord();state="ask";$("act").textContent="CHECK";
   ans.value="";ans.className="";ans.readOnly=false;fb.textContent="";$("th").textContent="";
   deadline=performance.now()+TIME;lastT=performance.now();cancelAnimationFrame(raf);draw();
   speak();ans.focus();
 }
 function reveal(){
   if(state!=="ask")return;
-  state="reveal";cancelAnimationFrame(raf);
+  state="reveal";cancelAnimationFrame(raf);$("act").textContent="NEXT →";
   const got=ans.value.trim().toUpperCase(),ok=got===word.toUpperCase();
   total++;ans.readOnly=true;
   const h=hist[word]||(hist[word]={r:0,w:0});ok?h.r++:h.w++;h.last=ok?1:0;h.t=Date.now();doneRound.add(word);save();updMode();
@@ -133,9 +136,13 @@ function reveal(){
   $("score").textContent=score+" / "+total;$("th").textContent=TH[word]||"";
   $("streak").textContent=streak>1?"STREAK "+streak:"";
 }
+function unlock(){
+  try{ac=ac||new (window.AudioContext||window.webkitAudioContext)();if(ac.state!=="running")ac.resume()}catch(e){}
+  try{speechSynthesis.getVoices();speechSynthesis.resume();speechSynthesis.speak(new SpeechSynthesisUtterance(""))}catch(e){}
+}
 function start(){
   if(state!=="idle")return;
-  ac=ac||new (window.AudioContext||window.webkitAudioContext)();ac.resume();
+  unlock();
   $("idle").style.display="none";$("play").style.display="block";
   speechSynthesis.getVoices();next();
 }
@@ -153,7 +160,8 @@ ans.addEventListener("input",()=>{
   ans._len=ans.value.length;
   ans.value.length>=old?sTick():sBack();
 });
-$("rep").addEventListener("click",e=>{e.stopPropagation();tone(520,.06,"triangle",.05);speak();ans.focus()});
+$("rep").addEventListener("click",e=>{e.stopPropagation();unlock();tone(520,.06,"triangle",.05);speak();ans.focus()});
+$("act").addEventListener("click",e=>{e.stopPropagation();unlock();if(state==="ask"){sEnter();reveal()}else if(state==="reveal"){next()}});
 function updMode(){const w=sn().filter(k=>!hist[k].last).length;$("mode").textContent=mode==="review"?(w?"REVIEW · "+w+" WRONG":"REVIEW · ALL RIGHT"):"ALL WORDS";$("lv").textContent=LVNAME[level]}
 function closePanel(){panel=false;$("panel").style.display="none";if(state!=="idle")ans.focus()}
 function openPanel(){
