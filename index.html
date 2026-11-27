@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Spelling</title>
+<title>Lexia</title>
 <style>
 :root{--bg:#f6f5f1;--fg:#1c1c1a;--mute:#9a9890;--ok:#2f9e6b;--bad:#e0523f;--bar:#1c1c1a;
 box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
@@ -34,8 +34,9 @@ main{flex:1;display:flex;flex-direction:column;align-items:center;justify-conten
 #gear,#rgear{display:inline-flex;align-items:center;justify-content:center;line-height:1;padding:0;width:28px;height:28px;border-radius:50%}#setp{display:none;position:fixed;inset:0;background:var(--bg);z-index:7;padding:calc(env(safe-area-inset-top,0px) + 18px) 24px 24px}#sbox{max-width:560px;margin:0 auto}.srow{display:flex;justify-content:space-between;align-items:center;padding:18px 0;border-bottom:1px solid var(--mute);font-size:16px;letter-spacing:.15em}
 #panel{display:none;position:fixed;inset:0;background:var(--bg);z-index:8;padding:calc(env(safe-area-inset-top,0px) + 18px) 24px 24px;overflow-y:auto}#pbox{max-width:560px;margin:0 auto}#phead{display:flex;justify-content:space-between;align-items:center;font-size:13px;letter-spacing:.2em;color:var(--mute);margin-bottom:18px}
 .row{display:flex;justify-content:space-between;align-items:baseline;padding:10px 0;border-bottom:1px solid var(--mute);font-size:18px;letter-spacing:.15em}.row small{font-size:12px;color:var(--mute);letter-spacing:.1em}.row.ok{color:var(--ok)}.row.bad{color:var(--bad)}#pempty{color:var(--mute);font-size:13px;letter-spacing:.15em;padding:30px 0;text-align:center}
-#rd{display:none;position:fixed;inset:0;z-index:6;background:var(--bg);flex-direction:column;padding:calc(env(safe-area-inset-top,0px) + 14px) 20px calc(env(safe-area-inset-bottom,0px) + 14px)}
-#rbar{display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:18px}#rbar::after{content:"";flex-basis:100%;order:2}#rctl{display:contents}#rctl>*{order:3}#rgear{order:0;margin-left:auto}
+#rd{display:none;position:fixed;inset:0;z-index:6;background:var(--bg);flex-direction:column;padding:calc(env(safe-area-inset-top,0px) + 14px) 20px calc(env(safe-area-inset-bottom,0px) + 14px);touch-action:manipulation}
+#rbar button,#rfoot button{position:relative;z-index:1}
+#rbar{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;row-gap:14px}#rctl{display:flex;gap:8px;flex-wrap:wrap}
 #rstat{min-height:2em;margin:0;flex:1 1 auto;order:-1;text-align:left;font-size:13px;letter-spacing:.2em;color:var(--mute)}
 #rtext{flex:1;overflow:hidden;max-width:760px;width:100%;margin:0 auto;font-size:clamp(22px,4.4vw,34px);line-height:1.8;text-align:center;-webkit-mask-image:linear-gradient(transparent,#000 12%,#000 88%,transparent);mask-image:linear-gradient(transparent,#000 12%,#000 88%,transparent)}
 #rtext.done{overflow-y:auto}.sp{height:42vh}
@@ -48,7 +49,7 @@ footer{padding:18px;text-align:center;font-size:11px;letter-spacing:.2em;color:v
 <div id="bar"></div>
 <header><span id="score">0 / 0</span><span id="ctrl"><button class="chip" id="lv" type="button" tabindex="-1"></button><button class="chip" id="mode" type="button" tabindex="-1"></button></span><span id="streak"></span><button class="chip" id="gear" type="button" tabindex="-1" aria-label="settings"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></button></header>
 <main>
-  <div id="idle"><div id="title">SPELLING</div><div id="sub">PRESS ENTER TO START</div></div>
+  <div id="idle"><div id="title">LEXIA</div><div id="sub">PRESS ENTER TO START</div></div>
   <div id="play"><div id="arow"><button id="rep" type="button" tabindex="-1"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4z" fill="currentColor"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg><span class="rt">REPLAY</span></button><input id="ans" autocomplete="off" autocorrect="off" autocapitalize="characters" spellcheck="false" aria-label="answer"></div><div id="diff"></div><div id="fb"></div><div id="th"></div><div id="btns"><button id="act" type="button" tabindex="-1">CHECK</button></div></div>
 </main>
 <div id="setp"><div id="sbox"><div id="phead"><span>SETTINGS</span><button class="chip" id="sclose" type="button" tabindex="-1">CLOSE</button></div><div class="srow" id="rowRead"><span id="mlabel">READ MODE</span><button class="chip" id="rdb" type="button" tabindex="-1">OPEN</button></div><div class="srow" id="rowHist"><span>HISTORY</span><button class="chip" id="hbtn" type="button" tabindex="-1">OPEN</button></div><div class="srow" id="rowSpd"><span>VOICE SPEED</span><button class="chip" id="spd" type="button" tabindex="-1"></button></div></div></div>
@@ -289,7 +290,7 @@ function startRec(){
   r.onend=()=>{if(running&&rec===r){try{startRec()}catch(x){}}};
   r.start();
 }
-function halt(){running=false;cancelAnimationFrame(rafR);rafR=0;clearTimeout(endT);endT=0;if(rec){rec.onend=null;try{rec.stop()}catch(x){}rec=null}}
+function halt(){running=false;cancelAnimationFrame(rafR);rafR=0;clearTimeout(endT);endT=0;if(rec){rec.onend=null;try{rec.stop()}catch(x){}rec=null}try{if(ac)ac.resume()}catch(e){}}
 function stopRead(silent){
   const was=running;halt();$('rgo').textContent='START READING';
   if(!was||silent)return;
@@ -302,20 +303,21 @@ function stopRead(silent){
 }
 function startRead(){
   if(!SR){$('rstat').textContent='NO SPEECH RECOGNITION IN THIS BROWSER · USE CHROME OR EDGE';return}
+  try{if(ac&&ac.state==="running")ac.suspend()}catch(e){}
   loadText();running=true;$('rgo').textContent='STOP';$('rstat').textContent='LISTENING · READ ALOUD';
   try{startRec()}catch(x){halt();$('rgo').textContent='START READING'}
   setTimeout(()=>{if(running&&!rafR)$('rstat').textContent='WAITING FOR MIC · NO PROMPT? OPEN THIS PAGE DIRECTLY IN SAFARI'},3000);
 }
 const toggleRead=()=>running?stopRead(false):startRead();
-function syncMode(){$('mlabel').textContent=reading?'SPELLING MODE':'READ MODE';$('rdb').textContent=reading?'SWITCH':'OPEN';$('rowHist').style.display=reading?'none':'';$('rowSpd').style.display=reading?'none':''}
+function syncMode(){$('mlabel').textContent=reading?'SPELLING MODE':'READ MODE';$('rdb').textContent=reading?'SWITCH':'OPEN';$('rowRead').style.display='';$('rowHist').style.display=reading?'none':'';$('rowSpd').style.display=reading?'none':''}
 function closeRead(){stopRead(true);reading=false;$('rd').style.display='none';if(state!=='idle')ans.focus()}
 $('rdb').addEventListener('click',e=>{e.stopPropagation();$('setp').style.display='none';if(reading){closeRead();return}if('speechSynthesis' in window)speechSynthesis.cancel();reading=true;$('rd').style.display='flex';loadText()});
-$('rbar').appendChild($('rstat'));$('rgear').addEventListener('click',e=>{e.stopPropagation();ans.blur();syncMode();$('setp').style.display='block'});
+$('rbar').insertBefore($('rstat'),$('rbar').firstChild);$('rgear').addEventListener('click',e=>{e.stopPropagation();ans.blur();syncMode();$('setp').style.display='block'});
 $('rx').addEventListener('click',closeRead);
-$('rgo').addEventListener('click',toggleRead);
-$('rlv').addEventListener('click',()=>{rl=rl%3+1;ri=0;loadText()});
-$('rtx').addEventListener('click',()=>{ri++;loadText()});
-$('rsp').addEventListener('click',()=>{rs=(rs+1)%SPD.length;$('rsp').textContent='SPEED '+SPD[rs]+'x'});
+$('rgo').addEventListener('click',e=>{e.stopPropagation();toggleRead()});
+$('rlv').addEventListener('click',e=>{e.stopPropagation();rl=rl%3+1;ri=0;loadText()});
+$('rtx').addEventListener('click',e=>{e.stopPropagation();ri++;loadText()});
+$('rsp').addEventListener('click',e=>{e.stopPropagation();rs=(rs+1)%SPD.length;$('rsp').textContent='SPEED '+SPD[rs]+'x'});
 document.addEventListener('keydown',e=>{if(!reading)return;if(e.key==='Enter'){e.preventDefault();toggleRead()}else if(e.key==='Escape')closeRead()});
 </script>
 </body>
