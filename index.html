@@ -314,10 +314,15 @@ function closeRead(){stopRead(true);reading=false;$('rd').style.display='none';i
 $('rdb').addEventListener('click',e=>{e.stopPropagation();$('setp').style.display='none';if(reading){closeRead();return}if('speechSynthesis' in window)speechSynthesis.cancel();reading=true;$('rd').style.display='flex';loadText()});
 $('rbar').insertBefore($('rstat'),$('rbar').firstChild);$('rgear').addEventListener('click',e=>{e.stopPropagation();ans.blur();syncMode();$('setp').style.display='block'});
 $('rx').addEventListener('click',closeRead);
-$('rgo').addEventListener('click',e=>{e.stopPropagation();toggleRead()});
-$('rlv').addEventListener('click',e=>{e.stopPropagation();rl=rl%3+1;ri=0;loadText()});
-$('rtx').addEventListener('click',e=>{e.stopPropagation();ri++;loadText()});
-$('rsp').addEventListener('click',e=>{e.stopPropagation();rs=(rs+1)%SPD.length;$('rsp').textContent='SPEED '+SPD[rs]+'x'});
+function bindTap(el,fn){
+  let fired=false;
+  el.addEventListener('touchend',e=>{fired=true;e.preventDefault();fn(e)},{passive:false});
+  el.addEventListener('click',e=>{if(fired){fired=false;return}fn(e)});
+}
+bindTap($('rgo'),e=>{e.stopPropagation();toggleRead()});
+bindTap($('rlv'),e=>{e.stopPropagation();rl=rl%3+1;ri=0;loadText()});
+bindTap($('rtx'),e=>{e.stopPropagation();ri++;loadText()});
+bindTap($('rsp'),e=>{e.stopPropagation();rs=(rs+1)%SPD.length;$('rsp').textContent='SPEED '+SPD[rs]+'x'});
 document.addEventListener('keydown',e=>{if(!reading)return;if(e.key==='Enter'){e.preventDefault();toggleRead()}else if(e.key==='Escape')closeRead()});
 </script>
 </body>
