@@ -18,25 +18,20 @@ main{flex:1;display:flex;flex-direction:column;align-items:center;justify-conten
 #title{font-size:clamp(28px,7vw,56px);letter-spacing:.35em;margin-right:-.35em}
 #sub{margin-top:20px;font-size:13px;letter-spacing:.25em;color:var(--mute);animation:blink 1.4s infinite}
 @keyframes blink{50%{opacity:.25}}
-#play{display:none;width:100%;flex-direction:column;align-items:center}
-#ans{width:100%;max-width:900px;background:none;border:0;outline:0;color:var(--fg);text-align:center;text-transform:uppercase;font:inherit;font-size:clamp(28px,7vw,60px);letter-spacing:.18em;padding:0;caret-color:var(--fg)}
-#ans.ok{color:var(--ok)}#ans.bad{color:var(--bad)}#diff{display:none;min-height:1.2em;font-size:clamp(26px,6.5vw,68px);white-space:nowrap;overflow:hidden;letter-spacing:.18em;text-transform:uppercase;text-align:center;line-height:1.2}#diff .ok{color:var(--ok)}#diff .miss,#diff .bad{color:var(--bad)}#diff .dl{white-space:nowrap}#diff .gap{color:var(--mute)}#diff .sm{font-size:50%}
-#fb{height:1.4em;margin-top:18px;font-size:clamp(18px,3.6vw,28px);letter-spacing:.18em;color:var(--ok)}
+#play{display:none;width:100%}
+#ans{width:100%;max-width:900px;background:none;border:0;outline:0;color:var(--fg);text-align:center;text-transform:uppercase;font:inherit;font-size:clamp(36px,10vw,88px);letter-spacing:.18em;padding:0;caret-color:var(--fg)}
+#ans.ok{color:var(--ok)}#ans.bad{color:var(--bad);text-decoration:line-through;text-decoration-thickness:3px}
+#fb{height:1.4em;margin-top:18px;font-size:clamp(22px,5vw,40px);letter-spacing:.18em;color:var(--ok)}
 .pop{animation:pop .25s}@keyframes pop{from{transform:scale(1.15)}to{transform:scale(1)}}
 .shake{animation:shake .3s}@keyframes shake{25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
-#rep{display:inline-flex;align-items:center;gap:10px;margin-top:0;background:none;border:1.5px solid var(--mute);color:var(--fg);border-radius:999px;padding:10px 22px;font:inherit;font-size:13px;letter-spacing:.2em;cursor:pointer;transition:transform .1s,border-color .1s}#rep:hover{border-color:var(--fg)}#rep:active{transform:scale(.94)}
-#btns{display:flex;justify-content:flex-end;align-items:center;width:100%;max-width:900px;margin:26px auto 0}
-#arow{display:contents}#arow #ans{flex:none;width:100%;max-width:900px;min-width:0}#rep{order:5;margin-top:28px}body.touch #rep{order:-1;margin:0;width:44px;height:44px;padding:0;justify-content:center;border-radius:50%}body.touch #rep .rt{display:none}body.touch #rep svg{width:18px;height:18px}body.touch #btns{display:flex;justify-content:space-between;align-items:center;gap:24px}
-#act{display:none;align-items:center;gap:10px;background:none;border:1.5px solid var(--mute);color:var(--fg);border-radius:999px;padding:10px 22px;font:inherit;font-size:13px;letter-spacing:.2em;cursor:pointer;transition:transform .1s,border-color .1s}body.touch #act{display:inline-flex}#act:hover{border-color:var(--fg)}#act:active{transform:scale(.94)}
-@media (orientation:portrait){body.touch #btns{position:fixed;left:0;right:0;bottom:var(--kb,0px);margin:0;max-width:none;padding:12px 20px calc(env(safe-area-inset-bottom,0px) + 12px);background:var(--bg);z-index:4}body.touch #play{padding-bottom:96px}}
-@media (orientation:portrait){body.touch.kbon #btns{position:static;bottom:auto;margin:24px auto 0;padding:0;background:none}body.touch.kbon #play{padding-bottom:0}}
-#ctrl{display:flex;gap:18px;flex-wrap:wrap;justify-content:center;flex-basis:100%;order:3;margin-top:10px}#th{margin-top:10px;min-height:1.5em;font-size:clamp(14px,2.8vw,18px);color:var(--mute);letter-spacing:.04em}.chip{background:none;border:1.5px solid var(--mute);color:var(--fg);border-radius:999px;padding:5px 12px;font:inherit;font-size:11px;letter-spacing:.2em;cursor:pointer}.chip:hover{border-color:var(--fg)}
-#gear,#rgear{display:inline-flex;align-items:center;justify-content:center;line-height:1;padding:0;width:28px;height:28px;border-radius:50%}#setp{display:none;position:fixed;inset:0;background:var(--bg);z-index:7;padding:calc(env(safe-area-inset-top,0px) + 18px) 24px 24px}#sbox{max-width:560px;margin:0 auto}.srow{display:flex;justify-content:space-between;align-items:center;padding:18px 0;border-bottom:1px solid var(--mute);font-size:16px;letter-spacing:.15em}
-#panel{display:none;position:fixed;inset:0;background:var(--bg);z-index:8;padding:calc(env(safe-area-inset-top,0px) + 18px) 24px 24px;overflow-y:auto}#pbox{max-width:560px;margin:0 auto}#phead{display:flex;justify-content:space-between;align-items:center;font-size:13px;letter-spacing:.2em;color:var(--mute);margin-bottom:18px}
+#rep{display:inline-flex;align-items:center;gap:10px;margin-top:28px;background:none;border:1.5px solid var(--mute);color:var(--fg);border-radius:999px;padding:10px 22px;font:inherit;font-size:13px;letter-spacing:.2em;cursor:pointer;transition:transform .1s,border-color .1s}#rep:hover{border-color:var(--fg)}#rep:active{transform:scale(.94)}
+#act{display:none;margin-top:18px;background:var(--fg);color:var(--bg);border:0;border-radius:999px;padding:14px 44px;font:inherit;font-size:15px;letter-spacing:.25em;cursor:pointer}body.touch #act{display:inline-flex}#act:active{transform:scale(.95)}
+#ctrl{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}#th{margin-top:10px;min-height:1.5em;font-size:clamp(16px,3.6vw,24px);color:var(--mute);letter-spacing:.04em}.chip{background:none;border:1.5px solid var(--mute);color:var(--fg);border-radius:999px;padding:5px 12px;font:inherit;font-size:11px;letter-spacing:.2em;cursor:pointer}.chip:hover{border-color:var(--fg)}
+#panel{display:none;position:fixed;inset:0;background:var(--bg);z-index:5;padding:calc(env(safe-area-inset-top,0px) + 18px) 24px 24px;overflow-y:auto}#pbox{max-width:560px;margin:0 auto}#phead{display:flex;justify-content:space-between;align-items:center;font-size:13px;letter-spacing:.2em;color:var(--mute);margin-bottom:18px}
 .row{display:flex;justify-content:space-between;align-items:baseline;padding:10px 0;border-bottom:1px solid var(--mute);font-size:18px;letter-spacing:.15em}.row small{font-size:12px;color:var(--mute);letter-spacing:.1em}.row.ok{color:var(--ok)}.row.bad{color:var(--bad)}#pempty{color:var(--mute);font-size:13px;letter-spacing:.15em;padding:30px 0;text-align:center}
 #rd{display:none;position:fixed;inset:0;z-index:6;background:var(--bg);flex-direction:column;padding:calc(env(safe-area-inset-top,0px) + 14px) 20px calc(env(safe-area-inset-bottom,0px) + 14px)}
-#rbar{display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:18px}#rbar::after{content:"";flex-basis:100%;order:2}#rctl{display:contents}#rctl>*{order:3}#rgear{order:0;margin-left:auto}
-#rstat{min-height:2em;margin:0;flex:1 1 auto;order:-1;text-align:left;font-size:13px;letter-spacing:.2em;color:var(--mute)}
+#rbar{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}#rctl{display:flex;gap:8px;flex-wrap:wrap}
+#rstat{min-height:2em;margin:14px 0 6px;text-align:center;font-size:13px;letter-spacing:.2em;color:var(--mute)}
 #rtext{flex:1;overflow:hidden;max-width:760px;width:100%;margin:0 auto;font-size:clamp(22px,4.4vw,34px);line-height:1.8;text-align:center;-webkit-mask-image:linear-gradient(transparent,#000 12%,#000 88%,transparent);mask-image:linear-gradient(transparent,#000 12%,#000 88%,transparent)}
 #rtext.done{overflow-y:auto}.sp{height:42vh}
 .w{display:inline-block;margin:0 .2em;transition:color .25s}.w.ok{color:var(--ok)}.w.close{color:#e0a100}.w.miss{color:var(--bad)}
@@ -46,14 +41,13 @@ footer{padding:18px;text-align:center;font-size:11px;letter-spacing:.2em;color:v
 </head>
 <body>
 <div id="bar"></div>
-<header><span id="score">0 / 0</span><span id="ctrl"><button class="chip" id="lv" type="button" tabindex="-1"></button><button class="chip" id="mode" type="button" tabindex="-1"></button></span><span id="streak"></span><button class="chip" id="gear" type="button" tabindex="-1" aria-label="settings"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></button></header>
+<header><span id="score">0 / 0</span><span id="ctrl"><button class="chip" id="rdb" type="button" tabindex="-1">READ MODE</button><button class="chip" id="lv" type="button" tabindex="-1"></button><button class="chip" id="mode" type="button" tabindex="-1"></button><button class="chip" id="hbtn" type="button" tabindex="-1">HISTORY</button></span><span id="streak"></span></header>
 <main>
   <div id="idle"><div id="title">SPELLING</div><div id="sub">PRESS ENTER TO START</div></div>
-  <div id="play"><div id="arow"><button id="rep" type="button" tabindex="-1"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4z" fill="currentColor"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg><span class="rt">REPLAY</span></button><input id="ans" autocomplete="off" autocorrect="off" autocapitalize="characters" spellcheck="false" aria-label="answer"></div><div id="diff"></div><div id="fb"></div><div id="th"></div><div id="btns"><button id="act" type="button" tabindex="-1">CHECK</button></div></div>
+  <div id="play"><input id="ans" autocomplete="off" autocorrect="off" autocapitalize="characters" spellcheck="false" aria-label="answer"><div id="fb"></div><button id="act" type="button" tabindex="-1">CHECK</button><div id="th"></div><button id="rep" type="button" tabindex="-1"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4z" fill="currentColor"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg>REPLAY</button></div>
 </main>
-<div id="setp"><div id="sbox"><div id="phead"><span>SETTINGS</span><button class="chip" id="sclose" type="button" tabindex="-1">CLOSE</button></div><div class="srow" id="rowRead"><span id="mlabel">READ MODE</span><button class="chip" id="rdb" type="button" tabindex="-1">OPEN</button></div><div class="srow" id="rowHist"><span>HISTORY</span><button class="chip" id="hbtn" type="button" tabindex="-1">OPEN</button></div><div class="srow" id="rowSpd"><span>VOICE SPEED</span><button class="chip" id="spd" type="button" tabindex="-1"></button></div></div></div>
-<div id="panel"><div id="pbox"><div id="phead"><span id="ptitle"></span><button class="chip" id="pclose" type="button" tabindex="-1">BACK</button></div><div id="plist"></div></div></div>
-<div id="rd"><div id="rbar"><span id="rctl"><button class="chip" id="rlv" type="button" tabindex="-1"></button><button class="chip" id="rtx" type="button" tabindex="-1"></button><button class="chip" id="rsp" type="button" tabindex="-1"></button><button class="chip" id="rgear" type="button" tabindex="-1" aria-label="settings"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:middle"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></button></span></div><div id="rstat"></div><div id="rtext"></div><div id="rfoot"><button class="chip" id="rgo" type="button" tabindex="-1">START READING</button></div></div>
+<div id="panel"><div id="pbox"><div id="phead"><span id="ptitle"></span><button class="chip" id="pclose" type="button" tabindex="-1">CLOSE</button></div><div id="plist"></div></div></div>
+<div id="rd"><div id="rbar"><button class="chip" id="rx" type="button" tabindex="-1">CLOSE</button><span id="rctl"><button class="chip" id="rlv" type="button" tabindex="-1"></button><button class="chip" id="rtx" type="button" tabindex="-1"></button><button class="chip" id="rsp" type="button" tabindex="-1"></button></span></div><div id="rstat"></div><div id="rtext"></div><div id="rfoot"><button class="chip" id="rgo" type="button" tabindex="-1">START READING</button></div></div>
 <footer>ENTER SUBMIT / NEXT &nbsp;·&nbsp; TAB REPLAY &nbsp;·&nbsp; CTRL+M MUTE</footer>
 <script>
 const WORDS="accommodate achieve acquire address aggressive apparent argument beautiful beginning believe calendar category cemetery changeable committee conscience conscious definitely description disappoint embarrass environment especially exaggerate existence familiar February fluorescent foreign forty government grammar guarantee harass height humorous immediately independent intelligence interrupt knowledge laboratory leisure library license maintenance millennium miniature mischievous necessary neighbor noticeable occasion occurrence parallel perseverance possession privilege pronunciation questionnaire receive recommend reference relevant restaurant rhythm schedule separate sergeant successful surprise temperature tomorrow truly unnecessary vacuum weird width".split(" ");
@@ -70,24 +64,13 @@ DATA.forEach(([l,s])=>s.split(",").forEach(p=>{const[w,t]=p.split(":");TH[w]=t;L
   .forEach(([l,s])=>s.split(",").forEach(p=>{const[w,t]=p.split(":");TH[w]=t;put(w,l)}));
   [[1,"bread:ขนมปัง,chair:เก้าอี้,cloud:เมฆ,dance:เต้นรำ,dream:ความฝัน,earth:โลก,flower:ดอกไม้,hand:มือ,juice:น้ำผลไม้,kitchen:ห้องครัว,lemon:มะนาวเหลือง,mouse:หนู,paper:กระดาษ,pencil:ดินสอ,river:แม่น้ำ,smile:รอยยิ้ม,sleep:นอนหลับ,tiger:เสือ"],[2,"beach:ชายหาด,bridge:สะพาน,candle:เทียน,castle:ปราสาท,country:ประเทศ,daughter:ลูกสาว,enough:เพียงพอ,island:เกาะ,journey:การเดินทาง,minute:นาที,mountain:ภูเขา,picture:รูปภาพ,question:คำถาม,strange:แปลกประหลาด,thought:ความคิด,tonight:คืนนี้,weather:สภาพอากาศ,whistle:เสียงนกหวีด,yesterday:เมื่อวาน"],[3,"absence:การขาดงาน,achievement:ความสำเร็จ,advertisement:โฆษณา,appearance:รูปลักษณ์,audience:ผู้ชม,decision:การตัดสินใจ,discipline:วินัย,experience:ประสบการณ์,equipment:อุปกรณ์,exercise:การออกกำลังกาย,gorgeous:งดงามมาก,incredible:เหลือเชื่อ,marriage:การแต่งงาน,opportunity:โอกาส,physical:ทางกาย,probably:น่าจะ,professional:มืออาชีพ,responsible:รับผิดชอบ,secretary:เลขานุการ,sincerely:ด้วยความจริงใจ,thorough:ละเอียดถี่ถ้วน"],[4,"accidentally:โดยไม่ได้ตั้งใจ,acknowledge:ยอมรับ,ambiguous:กำกวม,anonymous:นิรนาม,appropriate:เหมาะสม,assassination:การลอบสังหาร,catastrophe:หายนะ,commitment:ความมุ่งมั่น,competition:การแข่งขัน,correspondence:การติดต่อทางจดหมาย,criticism:การวิจารณ์,desperate:สิ้นหวัง,efficient:มีประสิทธิภาพ,embarrassment:ความอับอาย,enthusiasm:ความกระตือรือร้น,hierarchy:ลำดับชั้น,irresistible:ต้านทานไม่ได้,misspell:สะกดผิด,permanent:ถาวร,prejudice:อคติ"],[5,"apocalypse:วันสิ้นโลก,assimilate:ดูดซึม,bureaucratic:เกี่ยวกับระบบราชการ,cantaloupe:แคนตาลูป,collaborate:ร่วมมือ,colleague:เพื่อนร่วมงาน,commemorate:รำลึกถึง,controversy:ข้อโต้แย้ง,diaphragm:กะบังลม,dilemma:ภาวะลำบากใจ,exhilarate:ทำให้ตื่นเต้นสนุกสนาน,hindrance:อุปสรรค,hypothesis:สมมติฐาน,inoculate:ฉีดวัคซีน,jeopardize:ทำให้ตกอยู่ในอันตราย,judgement:การตัดสิน,mortgage:การจำนอง,nauseous:คลื่นไส้,omission:การละเว้น,pastime:งานอดิเรก"],[6,"acquiesce:ยอมตามโดยดี,anachronism:สิ่งที่ล้าสมัยไม่เข้ายุค,belligerent:ก้าวร้าวชอบสู้,clairvoyant:ผู้มีญาณทิพย์,cognizant:ตระหนักรู้,dichotomy:การแบ่งเป็นสองขั้ว,ebullient:ร่าเริงล้นเหลือ,ephemeral:ชั่วคราวสั้นนัก,facetious:ชอบพูดเล่น,fastidious:จู้จี้พิถีพิถัน,incessant:ไม่หยุดหย่อน,insidious:แอบแฝงอันตราย,meticulous:พิถีพิถัน,nonchalant:เฉยเมย,ostracize:กีดกันออกจากกลุ่ม,pejorative:เชิงดูหมิ่น,quandary:ภาวะลำบากใจ,serendipity:การค้นพบโดยบังเอิญ,sycophant:คนประจบสอพลอ,tenacious:เหนียวแน่นไม่ยอมแพ้"],[7,"chiaroscuro:การเล่นแสงเงา,cacophony:เสียงอึกทึก,catharsis:การระบายอารมณ์,diaphanous:โปร่งแสงบางเบา,fuchsia:สีชมพูบานเย็น,hemorrhage:การตกเลือด,idiosyncratic:เฉพาะตัวแปลกๆ,juxtaposition:การวางเทียบเคียง,kaleidoscope:กล้องกระจกสีเปลี่ยนลาย,labyrinth:เขาวงกต,memorabilia:ของที่ระลึก,phlegmatic:เฉื่อยชา,pharmaceutical:เกี่ยวกับเภสัช,prestidigitation:การเล่นกล,sacrilegious:หมิ่นศาสนา,schism:การแตกแยก,sphygmomanometer:เครื่องวัดความดัน,subpoena:หมายศาล,xenophobia:ความกลัวคนต่างชาติ,zephyr:ลมอ่อนๆ"]]
   .forEach(([l,s])=>s.split(",").forEach(p=>{const[w,t]=p.split(":");TH[w]=t;put(w,l)}));
-  [[3,"acceptable:ยอมรับได้,analyze:วิเคราะห์,business:ธุรกิจ,column:คอลัมน์/เสา,dessert:ของหวาน,grievance:ความไม่พอใจ,hygiene:สุขอนามัย,pursue:ไล่ตาม,rehearse:ซ้อม,sentence:ประโยค/โทษ,suppress:กดข่ม,tragedy:โศกนาฏกรรม,bizarre:แปลกประหลาดมาก,conceive:คิดขึ้น,cupboard:ตู้"],[4,"bachelor:ปริญญาตรี,ceiling:เพดาน,chauffeur:คนขับรถ,dependent:ที่พึ่งพา,eligible:มีสิทธิ์,fascinate:ทำให้หลงใหล,gauge:มาตรวัด,guerrilla:กองโจร,illegible:อ่านไม่ออก,inaugurate:เปิดตัวอย่างเป็นทางการ,nuisance:สิ่งรบกวน,parliament:รัฐสภา,rhythmic:เป็นจังหวะ,sovereign:อธิปไตย,unanimous:เป็นเอกฉันท์"],[5,"accessible:เข้าถึงได้,accompaniment:ดนตรีประกอบ,acquittal:การพ้นข้อกล่าวหา,alleviate:บรรเทา,amateur:สมัครเล่น,anonymity:การไม่ระบุนาม,archipelago:หมู่เกาะ,bouquet:ช่อดอกไม้,chameleon:กิ้งก่า,deterrent:สิ่งยับยั้ง,embellish:ประดับตกแต่ง,exuberant:เปี่ยมพลัง,gruesome:น่าสยดสยอง,indispensable:ขาดไม่ได้,pageant:การประกวด"],[6,"aficionado:ผู้คลั่งไคล้,bibliophile:คนรักหนังสือ,corollary:ผลพลอยได้ตามมา,dilettante:คนรักงานอดิเรก,effervescent:ร่าเริงซ่าฟู่,eschew:เลี่ยง,fallacious:ผิดพลาดเชิงตรรกะ,gregarious:ชอบสังคม,hedonism:สุขนิยม,juggernaut:พลังมหาศาล,lugubrious:เศร้าหมอง,nemesis:คู่อริ,obsequious:ประจบ,perfunctory:ทำขอไปที,quixotic:เพ้อฝัน"],[7,"abstemious:พอประมาณในการดื่ม,apotheosis:จุดสูงสุด,bailiwick:ขอบเขตความรู้,cognoscente:ผู้รู้ลึก,defenestrate:โยนออกทางหน้าต่าง,epistemology:ญาณวิทยา,gossamer:ใยบางเบา,hermeneutic:การตีความ,lachrymose:ขี้แย,malapropism:การใช้คำผิดความหมาย,nonpareil:ไม่มีใครเทียบได้,opprobrium:การถูกประณาม,palimpsest:ต้นฉบับที่เขียนทับ,rapprochement:การคืนดี,sesquipedalian:ชอบใช้คำยาว"]]
-  .forEach(([l,s])=>s.split(",").forEach(p=>{const[w,t]=p.split(":");TH[w]=t;put(w,l)}));
-  [[3,"separately:แยกกัน,principal:ผู้อำนวยการ,principle:หลักการ,stationery:เครื่องเขียน,stationary:อยู่กับที่,accommodation:ที่พัก,occurred:เกิดขึ้นแล้ว,believable:น่าเชื่อถือ,sufficient:เพียงพอ,tendency:แนวโน้ม,ingredient:ส่วนผสม,temperament:อารมณ์/นิสัย,quite:ค่อนข้าง,quit:เลิก,affect:มีผลต่อ,effect:ผลลัพธ์,advice:คำแนะนำ,advise:แนะนำ,desert:ทะเลทราย,loyal:จงรักภักดี,lightning:ฟ้าแลบ,ninety:เก้าสิบ,pronounce:ออกเสียง,receipt:ใบเสร็จ,seize:ยึด,vaccine:วัคซีน,basically:โดยพื้นฐาน,bureau:สำนักงาน,cafeteria:โรงอาหาร,criticize:วิพากษ์วิจารณ์,dictionary:พจนานุกรม,disastrous:หายนะ,dominant:ครอบงำ,eighth:ที่แปด,electricity:ไฟฟ้า,envelope:ซองจดหมาย,exceed:เกิน,extraordinary:พิเศษมาก,fascinating:น่าหลงใหล,finally:ในที่สุด,guidance:คำแนะนำ,handkerchief:ผ้าเช็ดหน้า,illiterate:ไม่รู้หนังสือ,imaginary:ในจินตนาการ,jewelry:เครื่องประดับ,necessarily:จำเป็นต้อง,occasionally:เป็นครั้งคราว,pavilion:ศาลา,perceive:รับรู้,persuade:โน้มน้าว,psychology:จิตวิทยา,recognize:จำได้,reception:การต้อนรับ,referee:ผู้ตัดสิน,rhetoric:วาทศิลป์,soldier:ทหาร,souvenir:ของที่ระลึก,technique:เทคนิค,therefore:ดังนั้น,villain:ตัวร้าย"]]
-  .forEach(([l,s])=>s.split(",").forEach(p=>{const[w,t]=p.split(":");TH[w]=t;put(w,l)}));
   BYLV.rand=BYLV.all;
 })();
 const LVNAME={all:"ALL LEVELS",1:"BEGINNER",2:"NOVICE",3:"MODERATE",4:"ADVANCED",5:"EXPERT",6:"GENIUS",7:"MASTER",rand:"RANDOMISER"};
 const $=id=>document.getElementById(id);
 const ans=$("ans"),bar=$("bar"),fb=$("fb");
 const TOUCH=matchMedia("(pointer:coarse)").matches||navigator.maxTouchPoints>0;
-if(TOUCH){document.body.classList.add("touch");$("btns").prepend($("rep"))}
-if(TOUCH&&window.visualViewport){const vv=visualViewport;const place=()=>document.documentElement.style.setProperty("--kb",Math.max(0,innerHeight-vv.height-vv.offsetTop)+"px");vv.addEventListener("resize",place);vv.addEventListener("scroll",place);place()}
-if(TOUCH&&window.visualViewport){const vv2=visualViewport;const pl=()=>document.documentElement.style.setProperty("--kb",Math.max(0,innerHeight-vv2.height-vv2.offsetTop)+"px");ans.addEventListener("focus",()=>[100,300,700].forEach(t=>setTimeout(pl,t)));ans.addEventListener("blur",()=>[100,400,800].forEach(t=>setTimeout(pl,t)));vv2.addEventListener("resize",pl)}
-if(TOUCH){ans.addEventListener("focus",()=>document.body.classList.add("kbon"));ans.addEventListener("blur",()=>document.body.classList.remove("kbon"));ans.addEventListener("focus",()=>{if(state==="reveal"){window._kb=true;next();window._kb=false}})}
-if(TOUCH)ans.addEventListener("click",()=>{window._kb=true;if(document.activeElement===ans)ans.blur();ans.focus();window._kb=false});
-if(TOUCH){$("btns").addEventListener("pointerdown",e=>e.preventDefault());$("ctrl").addEventListener("pointerdown",e=>e.preventDefault())}
-const _focus=HTMLElement.prototype.focus;
-ans.focus=function(){if(TOUCH&&!window._kb)return;_focus.call(this)};
+if(TOUCH)document.body.classList.add("touch");
 let state="idle",deck=[],word="",deadline=0,raf=0,score=0,total=0,streak=0,muted=false,ac=null;
 let hist={},mode="all",level="all",panel=false,reading=false,lastT=0;
 try{hist=JSON.parse(localStorage.getItem("spell_hist")||"{}");mode=localStorage.getItem("spell_mode")||"all";level=localStorage.getItem("spell_lv")||"all"}catch(e){}
@@ -121,17 +104,11 @@ const sEnter=()=>tone(220,.09,"triangle",.25);
 const sOk=()=>{tone(660,.14,"sine",.09);tone(880,.14,"sine",.09,.1);tone(1320,.25,"sine",.09,.2)};
 const sBad=()=>{tone(220,.35,"sawtooth",.06,0,110);tone(165,.35,"sawtooth",.05,.12,80)};
 
-let vi=0;try{vi=+(localStorage.getItem("spell_vi")||0)}catch(e){}
-function enVoices(){return speechSynthesis.getVoices().filter(x=>/^en/i.test(x.lang)).sort((a,b)=>(/US/i.test(b.lang)-/US/i.test(a.lang)))}
-function pickVoice(){const l=enVoices();return l.find(x=>/samantha/i.test(x.name))||l[0]||null}
-function voiceName(){const v=pickVoice();return v?"VOICE · "+v.name.split(" ")[0].toUpperCase():"VOICE · DEFAULT"}
-const RATES=[0.6,0.75,0.85,1,1.2];let ri2=2;try{ri2=+(localStorage.getItem("spell_rate")||2)}catch(e){}
-const spdLabel=()=>"SPEED "+RATES[ri2]+"x";
 function speak(){
   if(!("speechSynthesis" in window))return;
-  if(speechSynthesis.speaking||speechSynthesis.pending)speechSynthesis.cancel();
-  const u=new SpeechSynthesisUtterance(word);u.lang="en-US";u.rate=RATES[ri2];
-  const v=pickVoice();
+  speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(word);u.lang="en-US";u.rate=.85;
+  const v=speechSynthesis.getVoices().find(x=>/^en[-_]US/i.test(x.lang))||speechSynthesis.getVoices().find(x=>/^en/i.test(x.lang));
   if(v)u.voice=v;u.onend=()=>{window._u=null};window._u=u;speechSynthesis.resume();speechSynthesis.speak(u);
 }
 function draw(){
@@ -142,68 +119,37 @@ function draw(){
   raf=requestAnimationFrame(draw);
 }
 function next(){
-  word=pickWord();state="ask";ans.style.display="";$("diff").style.display="none";$("act").textContent="CHECK";
+  word=pickWord();state="ask";$("act").textContent="CHECK";
   ans.value="";ans.className="";ans.readOnly=false;fb.textContent="";$("th").textContent="";
   deadline=performance.now()+TIME;lastT=performance.now();cancelAnimationFrame(raf);draw();
   speak();ans.focus();
 }
-function diffHTML(a,b){
-  const n=a.length,m=b.length,L=Array.from({length:n+1},()=>Array(m+1).fill(0));
-  for(let i=n-1;i>=0;i--)for(let j=m-1;j>=0;j--)L[i][j]=a[i]===b[j]?L[i+1][j+1]+1:Math.max(L[i+1][j],L[i][j+1]);
-  let i=0,j=0,out='';const sp=(c,k)=>'<span class="'+k+'">'+c+'</span>';
-  while(i<n||j<m){
-    if(i<n&&j<m&&a[i]===b[j]){out+=sp(b[j],'ok');i++;j++}
-    else if(j<m&&(i>=n||L[i][j+1]>=L[i+1][j])){out+=sp(b[j],'miss');j++}
-    else{out+=sp(a[i],'bad');i++}
-  }
-  return out;
-}
-function diffRows(a,b){
-  const n=a.length,m=b.length,L=Array.from({length:n+1},()=>Array(m+1).fill(0));
-  for(let i=n-1;i>=0;i--)for(let j=m-1;j>=0;j--)L[i][j]=a[i]===b[j]?L[i+1][j+1]+1:Math.max(L[i+1][j],L[i][j+1]);
-  let i=0,j=0,top='',bot='';const sp=(c,k)=>'<span class="'+k+'">'+c+'</span>';
-  while(i<n||j<m){
-    if(i<n&&j<m&&a[i]===b[j]){top+=sp(a[i],'ok');bot+=sp(b[j],'ok');i++;j++}
-    else if(j<m&&(i>=n||L[i][j+1]>=L[i+1][j])){top+=sp('·','gap');bot+=sp(b[j],'miss');j++}
-    else{top+=sp(a[i],'bad');bot+=sp('·','gap');i++}
-  }
-  return [top,bot];
-}
-function diffRows2(a,b){
-  let top='',bot='';
-  for(let i=0;i<Math.max(a.length,b.length);i++){
-    if(i<a.length)top+='<span class="'+(a[i]===b[i]?'ok':'bad')+'">'+a[i]+'</span>';
-    if(i<b.length)bot+='<span class="ok">'+b[i]+'</span>';
-  }
-  return [top,bot];
-}
 function reveal(){
   if(state!=="ask")return;
-  state="reveal";cancelAnimationFrame(raf);$("act").textContent="NEXT →";if(TOUCH)ans.blur();
+  state="reveal";cancelAnimationFrame(raf);$("act").textContent="NEXT →";
   const got=ans.value.trim().toUpperCase(),ok=got===word.toUpperCase();
-  total++;if(!TOUCH)ans.readOnly=true;
+  total++;ans.readOnly=true;
   const h=hist[word]||(hist[word]={r:0,w:0});ok?h.r++:h.w++;h.last=ok?1:0;h.t=Date.now();doneRound.add(word);save();updMode();
   if(ok){score++;streak++;ans.className="ok";fb.textContent="";sOk();ans.classList.add("pop")}
   else{streak=0;ans.className="bad";fb.style.color="var(--ok)";fb.textContent=word.toUpperCase();if(!got)ans.value="···";sBad();fb.classList.remove("shake");void fb.offsetWidth;fb.classList.add("shake")}
   if(ok){fb.style.color="var(--ok)";fb.textContent="✓"}
-  const dd=$("diff");const r=diffRows2(got,word.toUpperCase());dd.innerHTML='<div class="dl">'+r[0]+'</div><div class="dl sm">'+r[1]+'</div>';
   $("score").textContent=score+" / "+total;$("th").textContent=TH[word]||"";
   $("streak").textContent=streak>1?"STREAK "+streak:"";
 }
 function unlock(){
-  try{ac=ac||new (window.AudioContext||window.webkitAudioContext)();if(ac.state!=="running")ac.resume();if(!window._keep){window._keep=1;const b=ac.createBuffer(1,ac.sampleRate,ac.sampleRate);const s=ac.createBufferSource();s.buffer=b;s.loop=true;s.connect(ac.destination);s.start()}}catch(e){}
-  try{speechSynthesis.getVoices();speechSynthesis.resume()}catch(e){}
+  try{ac=ac||new (window.AudioContext||window.webkitAudioContext)();if(ac.state!=="running")ac.resume()}catch(e){}
+  try{speechSynthesis.getVoices();speechSynthesis.resume();speechSynthesis.speak(new SpeechSynthesisUtterance(""))}catch(e){}
 }
 function start(){
   if(state!=="idle")return;
   unlock();
-  $("idle").style.display="none";$("play").style.display="flex";
-  speechSynthesis.getVoices();window._kb=true;next();window._kb=false;
+  $("idle").style.display="none";$("play").style.display="block";
+  speechSynthesis.getVoices();next();
 }
 document.addEventListener("keydown",e=>{
   if(reading)return;if(panel){if(e.key==="Escape"||e.key==="Enter"){e.preventDefault();closePanel()}return}
   if(state==="idle"){if(e.key==="Enter"){e.preventDefault();start()}return}
-  if(e.key==="Enter"){e.preventDefault();if(TOUCH&&state==="ask"&&!ans.value.trim())return;sEnter();state==="ask"?reveal():next();return}
+  if(e.key==="Enter"){e.preventDefault();sEnter();state==="ask"?reveal():next();return}
   if(e.key==="Tab"){e.preventDefault();speak();return}
   if(state==="ask"&&(e.key==="m"||e.key==="M")&&e.ctrlKey){muted=!muted;e.preventDefault()}
   if(state==="reveal")e.preventDefault();
@@ -215,7 +161,7 @@ ans.addEventListener("input",()=>{
   ans.value.length>=old?sTick():sBack();
 });
 $("rep").addEventListener("click",e=>{e.stopPropagation();unlock();tone(520,.06,"triangle",.05);speak();ans.focus()});
-$("act").addEventListener("click",e=>{e.stopPropagation();unlock();if(state==="ask"){sEnter();reveal()}else if(state==="reveal"){window._kb=true;ans.readOnly=false;ans.focus();next();window._kb=false}});
+$("act").addEventListener("click",e=>{e.stopPropagation();unlock();if(state==="ask"){sEnter();reveal()}else if(state==="reveal"){next()}});
 function updMode(){const w=sn().filter(k=>!hist[k].last).length;$("mode").textContent=mode==="review"?(w?"REVIEW · "+w+" WRONG":"REVIEW · ALL RIGHT"):"ALL WORDS";$("lv").textContent=LVNAME[level]}
 function closePanel(){panel=false;$("panel").style.display="none";if(state!=="idle")ans.focus()}
 function openPanel(){
@@ -227,16 +173,12 @@ function openPanel(){
   $("panel").style.display="block";
 }
 $("mode").addEventListener("click",e=>{e.stopPropagation();mode=mode==="all"?"review":"all";deck=[];doneRound.clear();save();updMode();if(state!=="idle")ans.focus()});
-$("hbtn").addEventListener("click",e=>{e.stopPropagation();$("setp").style.display="none";openPanel()});
-$("spd").addEventListener("click",e=>{e.stopPropagation();unlock();ri2=(ri2+1)%RATES.length;try{localStorage.setItem("spell_rate",ri2)}catch(x){}$("spd").textContent=spdLabel();speak()});
-$("spd").textContent=spdLabel();
-$("gear").addEventListener("click",e=>{e.stopPropagation();ans.blur();syncMode();$("setp").style.display="block"});
-$("sclose").addEventListener("click",e=>{e.stopPropagation();$("setp").style.display="none";if(TOUCH)ans.blur();else if(state!=="idle")ans.focus()});
-$("pclose").addEventListener("click",e=>{e.stopPropagation();closePanel();$("setp").style.display="block"});
+$("hbtn").addEventListener("click",e=>{e.stopPropagation();openPanel()});
+$("pclose").addEventListener("click",e=>{e.stopPropagation();closePanel()});
 $("lv").addEventListener("click",e=>{e.stopPropagation();const o=["all","1","2","3","4","5","6","7","rand"];level=o[(o.indexOf(level)+1)%9];deck=[];doneRound.clear();save();updMode();if(state!=="idle")ans.focus()});
 updMode();
 document.addEventListener("click",()=>{if(panel||reading)return;state==="idle"?start():ans.focus()});
-ans.addEventListener("blur",()=>{if(!TOUCH&&state==="ask"&&!reading)setTimeout(()=>ans.focus(),0)});
+ans.addEventListener("blur",()=>{if(state!=="idle"&&!reading)setTimeout(()=>ans.focus(),0)});
 
 /* READ MODE */
 const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
@@ -307,10 +249,8 @@ function startRead(){
   setTimeout(()=>{if(running&&!rafR)$('rstat').textContent='WAITING FOR MIC · NO PROMPT? OPEN THIS PAGE DIRECTLY IN SAFARI'},3000);
 }
 const toggleRead=()=>running?stopRead(false):startRead();
-function syncMode(){$('mlabel').textContent=reading?'SPELLING MODE':'READ MODE';$('rdb').textContent=reading?'SWITCH':'OPEN';$('rowHist').style.display=reading?'none':'';$('rowSpd').style.display=reading?'none':''}
 function closeRead(){stopRead(true);reading=false;$('rd').style.display='none';if(state!=='idle')ans.focus()}
-$('rdb').addEventListener('click',e=>{e.stopPropagation();$('setp').style.display='none';if(reading){closeRead();return}if('speechSynthesis' in window)speechSynthesis.cancel();reading=true;$('rd').style.display='flex';loadText()});
-$('rbar').appendChild($('rstat'));$('rgear').addEventListener('click',e=>{e.stopPropagation();ans.blur();syncMode();$('setp').style.display='block'});
+$('rdb').addEventListener('click',e=>{e.stopPropagation();if('speechSynthesis' in window)speechSynthesis.cancel();reading=true;$('rd').style.display='flex';loadText()});
 $('rx').addEventListener('click',closeRead);
 $('rgo').addEventListener('click',toggleRead);
 $('rlv').addEventListener('click',()=>{rl=rl%3+1;ri=0;loadText()});
