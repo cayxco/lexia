@@ -312,7 +312,6 @@ const toggleRead=()=>running?stopRead(false):startRead();
 function syncMode(){$('mlabel').textContent=reading?'SPELLING MODE':'READ MODE';$('rdb').textContent=reading?'SWITCH':'OPEN';$('rowRead').style.display='';$('rowHist').style.display=reading?'none':'';$('rowSpd').style.display=reading?'none':''}
 function closeRead(){stopRead(true);reading=false;$('rd').style.display='none';if(state!=='idle')ans.focus()}
 $('rdb').addEventListener('click',e=>{e.stopPropagation();$('setp').style.display='none';if(reading){closeRead();return}if('speechSynthesis' in window)speechSynthesis.cancel();reading=true;$('rd').style.display='flex';loadText();
-  if(!window._dbgBound){window._dbgBound=1;document.addEventListener('touchstart',e=>{if(!reading)return;const t=e.target;$('rstat').textContent='TAP: '+t.tagName+'#'+(t.id||'-')},{passive:true,capture:true})}
 });
 $('rbar').insertBefore($('rstat'),$('rbar').firstChild);
 (function(){const r1=document.createElement('div');r1.id='rrow1';const r2=document.createElement('div');r2.id='rrow2';r1.appendChild($('rstat'));r1.appendChild($('rgear'));r2.appendChild($('rlv'));r2.appendChild($('rtx'));r2.appendChild($('rsp'));$('rbar').appendChild(r1);$('rbar').appendChild(r2)})();
